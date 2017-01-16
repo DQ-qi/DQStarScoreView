@@ -52,3 +52,4 @@ typedef NS_OPTIONS(NSUInteger, DQStarShowStyle){
 
 /** 设置星星的分数 score*/
 - (void)ShowDQStarScoreFunction:(CGFloat )score;
+
