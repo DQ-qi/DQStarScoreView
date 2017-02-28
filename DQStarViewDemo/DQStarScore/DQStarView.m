@@ -66,7 +66,7 @@ const NSInteger DQUpSpace = 1;//星星的上边距
 }
 - (void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-   
+    
 }
 - (void)setStarTotalCount:(NSUInteger)starTotalCount{
     
@@ -89,7 +89,7 @@ const NSInteger DQUpSpace = 1;//星星的上边距
     [self starFromChageFunction];
 }
 - (void)setShowStyle:(DQStarShowStyle)ShowStyle{
-
+    
     _ShowStyle = ShowStyle;
 }
 - (void)ShowDQStarScoreFunction:(CGFloat )score{
@@ -236,12 +236,15 @@ const NSInteger DQUpSpace = 1;//星星的上边距
     
     if (style == DQStarShowStyleSingleClick) {
         NSInteger index = [self getEventShowStartForPoint:point];
-        if (_starCurrntFl<index) {
-            [self ShowDQStarScoreFunction:index];
-            _starCurrntFl = index;
+        if (index>=_starTotalCount) {
+            index = _starTotalCount;
+        }
+        if (_starCurrntFl>=index) {
+            [self ShowDQStarScoreFunction:index-1];
+            _starCurrntFl = index-1;
         }else{
-            _starCurrntFl = index+1;
-            [self ShowDQStarScoreFunction:(index+1)];
+            _starCurrntFl = index;
+            [self ShowDQStarScoreFunction:index];
         }
         if ([self.delegate respondsToSelector:@selector(starScoreChangFunction:andScore:)]) {
             
@@ -254,9 +257,9 @@ const NSInteger DQUpSpace = 1;//星星的上边距
         if ([self.delegate respondsToSelector:@selector(starScoreChangFunction:andScore:)]) {
             [self.delegate starScoreChangFunction:self andScore:self.starCurrntFl];
         }
-    
+        
     }
-
+    
 }
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
@@ -274,7 +277,7 @@ const NSInteger DQUpSpace = 1;//星星的上边距
     }
     [[self nextResponder] touchesEnded:touches withEvent:event];
     self.savePoint = point;
-
+    
 }
 - (NSInteger )getEventShowStartForPoint:(CGPoint )point{
     
@@ -284,9 +287,9 @@ const NSInteger DQUpSpace = 1;//星星的上边距
         index = 0;
     }
     if (point.x>=(self.width-_starSpace)) {
-       index = _starTotalCount;
+        index = _starTotalCount;
     }
-    index = floorf(point.x/(size.width+_starSpace));
+    index = ceilf(point.x/(size.width+_starSpace));
     
     return index;
 }
@@ -348,6 +351,6 @@ const NSInteger DQUpSpace = 1;//星星的上边距
     
     
     return count+countFl;
-
+    
 }
 @end
